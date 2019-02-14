@@ -48,12 +48,18 @@ class TestBaseModel_instantiation(unittest.TestCase):
         bm2 = BaseModel()
         self.assertLess(bm1.updated_at, bm2.updated_at)
 
-# Maybe?
-#    def test_updated_at_updates(self):
-#        bm = BaseModel()
-#        first_updated_at = bm.updated_at
-#        bm.name = "Holberton"
-#        self.assertLess(first_updated_at, bm.updated_at)
+    def test_str_representation(self):
+        tuuid = "123456"
+        bm1 = BaseModel()
+        bm1.id = tuuid
+        bm1.created_at = datetime.min
+        bm1.updated_at = datetime.min
+        output = "[BaseModel] (123456)"
+        bstr = bm1.__str__()
+        self.assertIn(output, bstr)
+        self.assertIn("'id': '123456'", bstr)
+        self.assertIn("'created_at': datetime.datetime(1, 1, 1, 0, 0)", bstr)
+        self.assertIn("'updated_at': datetime.datetime(1, 1, 1, 0, 0)", bstr)
 
 
 class TestBaseModel_save(unittest.TestCase):
@@ -106,6 +112,24 @@ class TestBaseModel_to_dict(unittest.TestCase):
         bm_dict = bm.to_dict()
         self.assertEqual(str, type(bm_dict["created_at"]))
         self.assertEqual(str, type(bm_dict["updated_at"]))
+
+    def test_to_dict_output(self):
+        tuuid = "123456"
+        bm = BaseModel()
+        bm.id = tuuid
+        bm.created_at = datetime.min
+        bm.updated_at = datetime.min
+        tdict = {
+            'id': '123456',
+            '__class__': 'BaseModel',
+            'created_at': datetime.min.isoformat(),
+            'updated_at': datetime.max.isoformat()
+        }
+        self.assertDictEqual(bm.to_dict(), tdict)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        bm = BaseModel()
+        self.assertNotEqual(bm.to_dict(), bm.__dict__)
 
     def test_to_dict_with_arg(self):
         bm = BaseModel()
