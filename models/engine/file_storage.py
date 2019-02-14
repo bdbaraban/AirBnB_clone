@@ -1,35 +1,40 @@
 #!/usr/bin/python3
 """file_storage module"""
+import json
+from models.base_model import BaseModel
 
 
 class FileStorage:
-    """BaseModel Class"""
-    def __init__(self, *args, **kwargs):
-        """__init__ magic method"""
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.today()
-        if len(kwargs) != 0:
-            for k, v in kwargs.items():
-                if k == "created_at" or k == "updated_at":
-                    self.__dict__[k] = datetime.strptime(v, tform)
-                else:
-                    self.__dict__[k] = v
+    """FileStorage Class"""
+    __file_path = "file.json"
+    __objects = {}
+
+    def all(self):
+        """all method"""
+        return FileStorage.__objects
+
+    def new(self, obj):
+        """new method"""
+        odict = FileStorage.__objects
+        ocname = obj.__class__.__name__
+        odict["{}.{}".format(ocname, obj.id)] = obj
 
     def save(self):
         """save method"""
-        self.updated_at = datetime.today()
+        objdict = {}
+        for i, o in FileStorage.__objects.items():
+            objdict[i] = o.to_dict()
+        with open(FileStorage.__file_path, "w+") as f:
+            json.dump(objdict, f)
 
-    def to_dict(self):
-        """to_dict method"""
-        rdict = self.__dict__.copy()
-        rdict["created_at"] = self.created_at.isoformat()
-        rdict["updated_at"] = self.updated_at.isoformat()
-        rdict["__class__"] = self.__class__.__name__
-        return rdict
-
-    def __str__(self):
-        """__str__ magic method"""
-        clname = self.__class__.__name__
-        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
+    def reload(self):
+        """reload method"""
+        try:
+            objl = []
+            with open(FileStorage.__file_path) as f:
+                objdict = json.load(f)
+                for i, o in objdict.items():
+                    objdict[i] = BaseModel(**o)
+            FileStorage.__objects = objdict
+        except FileNotFoundError:
+            return
