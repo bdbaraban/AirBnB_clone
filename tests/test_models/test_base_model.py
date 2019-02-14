@@ -95,17 +95,17 @@ class TestBaseModel_to_dict(unittest.TestCase):
 
     def test_to_dict_contains_correct_keys(self):
         bm = BaseModel()
-        self.assertIn(bm.to_dict(), "id")
-        self.assertIn(bm.to_dict(), "created_at")
-        self.assertIn(bm.to_dict(), "updated_at")
-        self.assertIn(bm.to_dict(), "__class__")
+        self.assertIn("id", bm.to_dict())
+        self.assertIn("created_at", bm.to_dict())
+        self.assertIn("updated_at", bm.to_dict())
+        self.assertIn("__class__", bm.to_dict())
 
     def test_to_dict_contains_added_attributes(self):
         bm = BaseModel()
         bm.name = "Holberton"
         bm.my_number = 98
-        self.assertIn(bm.to_dict(), "Holberton")
-        self.assertIn(bm.to_dict(), "my_number")
+        self.assertIn("name", bm.to_dict())
+        self.assertIn("my_number", bm.to_dict())
 
     def test_to_dict_datetime_attributes_are_strs(self):
         bm = BaseModel()
@@ -123,7 +123,7 @@ class TestBaseModel_to_dict(unittest.TestCase):
             'id': '123456',
             '__class__': 'BaseModel',
             'created_at': datetime.min.isoformat(),
-            'updated_at': datetime.max.isoformat()
+            'updated_at': datetime.min.isoformat()
         }
         self.assertDictEqual(bm.to_dict(), tdict)
 
