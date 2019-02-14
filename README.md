@@ -5,7 +5,4 @@
 ---
 
 <h1 align="center">HolbertonBnB</h1>
-
-## Description
-
-The HolbertonBnB (HBnB) is a clone of AirBnB.
+<p align="center">An AirBnB clone.</p>
