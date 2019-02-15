@@ -14,7 +14,7 @@ class User(BaseModel):
             *args (any): Unused.
             **kwargs (dict): Key/value pairs of attributes.
         """
-        super().__init__()
+        super().__init__(**kwargs)
         self.email = ""
         self.password = ""
         self.first_name = ""

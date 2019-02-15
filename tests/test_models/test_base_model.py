@@ -17,24 +17,19 @@ class TestBaseModel_instantiation(unittest.TestCase):
     """Unittests for testing instantiation of the BaseModel class."""
 
     def test_no_args_instantiates(self):
-        bm = BaseModel()
-        self.assertEqual(BaseModel, type(bm))
+        self.assertEqual(BaseModel, type(BaseModel()))
 
     def test_new_instance_stored_in_objects(self):
-        bm = BaseModel()
-        self.assertIn(bm, models.storage.all().values())
+        self.assertIn(BaseModel(), models.storage.all().values())
 
     def test_id_is_public_str(self):
-        bm = BaseModel()
-        self.assertEqual(str, type(bm.id))
+        self.assertEqual(str, type(BaseModel().id))
 
     def test_created_at_is_public_datetime(self):
-        bm = BaseModel()
-        self.assertEqual(datetime, type(bm.created_at))
+        self.assertEqual(datetime, type(BaseModel().created_at))
 
     def test_updated_at_is_public_datetime(self):
-        bm = BaseModel()
-        self.assertEqual(datetime, type(bm.updated_at))
+        self.assertEqual(datetime, type(BaseModel().updated_at))
 
     def test_two_models_unique_ids(self):
         bm1 = BaseModel()

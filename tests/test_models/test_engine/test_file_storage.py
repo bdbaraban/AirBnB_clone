@@ -51,6 +51,7 @@ class TestFileStorage_methods(unittest.TestCase):
 
     @classmethod
     def tearDown(self):
+        models.storage._FileStroage__objects = {}
         try:
             os.remove("file.json")
         except IOError:
@@ -71,13 +72,13 @@ class TestFileStorage_methods(unittest.TestCase):
             models.storage.all(1)
 
     def test_new(self):
-        bm = BaseModel(id="123")
+        bm = BaseModel()
         models.storage.new(bm)
-        self.assertIn("BaseModel.123", models.storage.all().keys())
+        self.assertIn("BaseModel." + bm.id, models.storage.all().keys())
         self.assertIn(bm, models.storage.all().values())
-        us = User(id="123")
+        us = User()
         models.storage.new(us)
-        self.assertIn("User.123", models.storage.all().keys())
+        self.assertIn("User." + us.id, models.storage.all().keys())
         self.assertIn(us, models.storage.all().values())
 
     def test_new_with_arg(self):
@@ -86,27 +87,21 @@ class TestFileStorage_methods(unittest.TestCase):
 
     def test_save(self):
         bm = BaseModel(name="Holberton")
+        us = User(name="Poppy")
         models.storage.new(bm)
+        models.storage.new(us)
         models.storage.save()
         save_text = ""
         with open("file.json", "r") as f:
             save_text = f.read()
             self.assertIn("BaseModel." + bm.id, save_text)
-        bm = BaseModel(name="Poppy")
+            self.assertIn("User." + us.id, save_text)
+        bm = BaseModel(name="Mission")
+        us = BaseModel(name="Street")
         models.storage.new(bm)
+        models.storage.new(us)
         models.storage.save()
-        with open("file.json") as f:
-            self.assertNotEqual(save_text, f.read())
-        us = User(name="Holberton")
-        models.storage.new(us)
-        us.save()
-        save_text = ""
-        with open("file.json") as f:
-            save_text = f.read()
-        us = User(name="Poppy")
-        models.storage.new(us)
-        us.save()
-        with open("file.json") as f:
+        with open("file.json", "r") as f:
             self.assertNotEqual(save_text, f.read())
 
     def test_save_with_arg(self):
@@ -114,16 +109,16 @@ class TestFileStorage_methods(unittest.TestCase):
             models.storage.save(1)
 
     def test_reload(self):
-        bm = BaseModel(id="98", name="Mission")
+        bm = BaseModel()
+        us = User()
         with open("file.json", "w") as f:
-            json.dump({"BaseModel.98": bm.to_dict()}, f)
+            json.dump({
+                "BaseModel." + bm.id: bm.to_dict(),
+                "User." + us.id: us.to_dict()
+            }, f)
         models.storage.reload()
-        self.assertIn("BaseModel.98", models.storage.all().keys())
-        us = User(id="98", name="Mission")
-        with open("file.json", "w") as f:
-            json.dump({"User.98": us.to_dict()}, f)
-        models.storage.reload()
-        self.assertIn("User.98", models.storage.all().keys())
+        self.assertIn("BaseModel." + bm.id, models.storage.all().keys())
+        self.assertIn("User." + us.id, models.storage.all().keys())
 
     def test_reload_no_file(self):
         objs = models.storage.all()
