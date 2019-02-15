@@ -12,6 +12,7 @@ import unittest
 from datetime import datetime
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
+from models.user import User
 
 
 class TestFileStorage_instantiation(unittest.TestCase):
@@ -60,6 +61,10 @@ class TestFileStorage_methods(unittest.TestCase):
         models.storage.new(bm)
         self.assertIn("BaseModel.123", models.storage.all().keys())
         self.assertIn(bm, models.storage.all().values())
+        us = User(id="123")
+        models.storage.new(us)
+        self.assertIn("User.123", models.storage.all().keys())
+        self.assertIn(us, models.storage.all().values())
 
     def test_new_with_arg(self):
         with self.assertRaises(TypeError):
@@ -77,6 +82,17 @@ class TestFileStorage_methods(unittest.TestCase):
         bm.save()
         with open("file.json") as f:
             self.assertNotEqual(save_text, f.read())
+        us = User(name="Holberton")
+        models.storage.new(us)
+        us.save()
+        save_text = ""
+        with open("file.json") as f:
+            save_text = f.read()
+        us = User(name="Poppy")
+        models.storage.new(us)
+        us.save()
+        with open("file.json") as f:
+            self.assertNotEqual(save_text, f.read())
 
     def test_save_with_arg(self):
         with self.assertRaises(TypeError):
@@ -88,6 +104,11 @@ class TestFileStorage_methods(unittest.TestCase):
             json.dump({"BaseModel.98": bm.to_dict()}, f)
         models.storage.reload()
         self.assertIn("BaseModel.98", models.storage.all().keys())
+        us = User(id="98", name="Mission")
+        with open("file.json", "w") as f:
+            json.dump({"User.98": us.to_dict()}, f)
+        models.storage.reload()
+        self.assertIn("User.98", models.storage.all().keys())
 
     def test_reload_no_file(self):
         objs = models.storage.all()
