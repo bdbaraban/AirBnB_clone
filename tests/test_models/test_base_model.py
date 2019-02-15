@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# test_base_model.py
 """Defines unittests for models/base_model.py.
 
 Unittest classes:
@@ -12,7 +11,6 @@ import models
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel_instantiation(unittest.TestCase):
@@ -21,6 +19,10 @@ class TestBaseModel_instantiation(unittest.TestCase):
     def test_no_args_instantiates(self):
         bm = BaseModel()
         self.assertEqual(BaseModel, type(bm))
+
+    def test_new_instance_stored_in_objects(self):
+        bm = BaseModel()
+        self.assertIn(bm, models.storage.all().values())
 
     def test_id_is_public_str(self):
         bm = BaseModel()
@@ -61,8 +63,11 @@ class TestBaseModel_instantiation(unittest.TestCase):
         self.assertIn("'created_at': " + dt_repr, bmstr)
         self.assertIn("'updated_at': " + dt_repr, bmstr)
 
+    def test_args_unused(self):
+        bm = BaseModel("123456")
+        self.assertNotIn("123456", bm.__dict__.values())
+
     def test_instantiation_with_kwargs(self):
-        """instantiation with kwargs test method"""
         dt = datetime.today()
         dt_iso = dt.isoformat()
         bm = BaseModel(id="345", created_at=dt_iso, updated_at=dt_iso)
@@ -73,6 +78,24 @@ class TestBaseModel_instantiation(unittest.TestCase):
 
 class TestBaseModel_save(unittest.TestCase):
     """Unittests for testing save method of the BaseModel class."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_one_save(self):
         bm = BaseModel()
@@ -93,6 +116,13 @@ class TestBaseModel_save(unittest.TestCase):
         bm = BaseModel()
         with self.assertRaises(TypeError):
             bm.save(1)
+
+    def test_save_updates_file(self):
+        bm = BaseModel()
+        bm.save()
+        bmid = "BaseModel." + bm.id
+        with open("file.json", "r") as f:
+            self.assertIn(bmid, f.read())
 
 
 class TestBaseModel_to_dict(unittest.TestCase):
@@ -144,13 +174,6 @@ class TestBaseModel_to_dict(unittest.TestCase):
         with self.assertRaises(TypeError):
             bm.to_dict(1)
 
+
 if __name__ == "__main__":
-    try:
-        os.rename("file.json", "tmp")
-    except IOError:
-        pass
     unittest.main()
-    try:
-        os.rename("tmp", "file.json")
-    except IOError:
-        pass
