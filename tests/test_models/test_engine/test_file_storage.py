@@ -43,14 +43,28 @@ class TestFileStorage_methods(unittest.TestCase):
     """Unittests for testing methods of the FileStorage class."""
 
     @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
     def tearDown(self):
         try:
             os.remove("file.json")
         except IOError:
             pass
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
 
     def test_all(self):
-        self.assertEqual(type(models.storage.all()), dict)
+        objs = models.storage.all()
+        self.assertEqual(type(objs), dict)
+        self.assertEqual(str, type(list(objs.keys())[0]))
+        self.assertIsInstance(list(objs.values())[0], BaseModel)
 
     def test_all_with_arg(self):
         with self.assertRaises(TypeError):
@@ -73,13 +87,14 @@ class TestFileStorage_methods(unittest.TestCase):
     def test_save(self):
         bm = BaseModel(name="Holberton")
         models.storage.new(bm)
-        bm.save()
+        models.storage.save()
         save_text = ""
-        with open("file.json") as f:
+        with open("file.json", "r") as f:
             save_text = f.read()
+            self.assertIn("BaseModel." + bm.id, save_text)
         bm = BaseModel(name="Poppy")
         models.storage.new(bm)
-        bm.save()
+        models.storage.save()
         with open("file.json") as f:
             self.assertNotEqual(save_text, f.read())
         us = User(name="Holberton")
@@ -112,10 +127,6 @@ class TestFileStorage_methods(unittest.TestCase):
 
     def test_reload_no_file(self):
         objs = models.storage.all()
-        try:
-            os.remove("file.json")
-        except:
-            pass
         models.storage.reload()
         self.assertEqual(objs, models.storage.all())
 
