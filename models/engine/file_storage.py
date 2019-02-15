@@ -16,7 +16,7 @@ class FileStorage:
 
     def all(self):
         """Return the dictionary __objects."""
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """Set in __objects obj with key <obj_class_name>.id"""
@@ -36,7 +36,6 @@ class FileStorage:
         """Deserialize the JSON file __file_path to __objects, if it exists."""
         try:
             with open(FileStorage.__file_path) as f:
-                FileStorage.__objects = {}
                 objdict = json.load(f)
                 for i, o in objdict.items():
                     self.new(BaseModel(**o))
