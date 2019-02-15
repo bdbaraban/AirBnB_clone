@@ -24,13 +24,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Create a new BaseModel, print its id, and save it to file.json"""
-        cls_name = parse(arg)[0]
+        arg_tup = parse(arg)
         classes = ["BaseModel"]
-        if cls_name is None:
+        if len(arg_tup) == 0:
             print("** class name missing **")
-        elif cls_name not in classes:
+        elif arg_tup[0] not in classes:
             print("** class doesn't exist **")
-        elif cls_name == classes[0]:
+        elif arg_tup[0] == classes[0]:
             print(BaseModel().id)
             FileStorage().save()
 
@@ -44,7 +44,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def help_quit(self):
-        """Dispay information about the quit command."""
+        """Display information about the quit command."""
         print("Quit command to exit the program")
 
     def do_EOF(self, arg):
@@ -56,6 +56,36 @@ class HBNBCommand(cmd.Cmd):
         """Display information about EOF signal handling."""
         print("EOF signal to exit the program")
 
+    def do_show(self, arg):
+        """Display string representation of an instance w/ class and id info"""
+        arg_tup = parse(arg)
+        classes = ["BaseModel"]
+        objdict = FileStorage()._FileStorage__objects
+        if len(arg_tup) == 0:
+            print("** class name missing **")
+        elif arg_tup[0] not in classes:
+            print("** class doesn't exist **")
+        elif len(arg_tup) == 1:
+            print("** instance id missing **")
+        elif "{}.{}".format(arg_tup[0], arg_tup[1]) not in objdict:
+            print("** no instance found **")
+        else:
+            print(objdict["{}.{}".format(arg_tup[0], arg_tup[1])].__str__())
 
+    def help_show(self):
+        """Displays help information for the show command"""
+        print("Displays an object's string representation based on the objects class and id")
+
+    def do_destroy(self, arg):
+        """Deletes instance based on class name and id updating JSON file"""
+        arg_tup = parse(arg)
+        classes = ["BaseModel"]
+        if len(arg_tup) == 0:
+            print("** class name missing **")
+        elif arg_tup[0] not in classes:
+            print("** class doesn't exist **")
+        elif len(arg_tup) == 1:
+            print("** instance id missing **")
+        elif 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
