@@ -19,3 +19,4 @@ class User(BaseModel):
         self.password = ""
         self.first_name = ""
         self.last_name = ""
+        models.storage.new(self)
