@@ -1,7 +1,5 @@
 #!/usr/bin/python3
 # test_base_model.py
-# Brennan D Baraban <375@holbertonschool.com>
-# Samie Azad <530@holbertonschool.com>
 """Defines unittests for models/base_model.py.
 
 Unittest classes:
@@ -9,9 +7,12 @@ Unittest classes:
     TestBaseModel_save
     TestBaseModel_to_dict
 """
+import os
+import models
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel_instantiation(unittest.TestCase):
@@ -49,17 +50,25 @@ class TestBaseModel_instantiation(unittest.TestCase):
         self.assertLess(bm1.updated_at, bm2.updated_at)
 
     def test_str_representation(self):
-        tuuid = "123456"
-        bm1 = BaseModel()
-        bm1.id = tuuid
-        bm1.created_at = datetime.min
-        bm1.updated_at = datetime.min
-        output = "[BaseModel] (123456)"
-        bstr = bm1.__str__()
-        self.assertIn(output, bstr)
-        self.assertIn("'id': '123456'", bstr)
-        self.assertIn("'created_at': datetime.datetime(1, 1, 1, 0, 0)", bstr)
-        self.assertIn("'updated_at': datetime.datetime(1, 1, 1, 0, 0)", bstr)
+        dt = datetime.today()
+        dt_repr = repr(dt)
+        bm = BaseModel()
+        bm.id = "123456"
+        bm.created_at = bm.updated_at = dt
+        bmstr = bm.__str__()
+        self.assertIn("[BaseModel] (123456)", bmstr)
+        self.assertIn("'id': '123456'", bmstr)
+        self.assertIn("'created_at': " + dt_repr, bmstr)
+        self.assertIn("'updated_at': " + dt_repr, bmstr)
+
+    def test_instantiation_with_kwargs(self):
+        """instantiation with kwargs test method"""
+        dt = datetime.today()
+        dt_iso = dt.isoformat()
+        bm = BaseModel(id="345", created_at=dt_iso, updated_at=dt_iso)
+        self.assertEqual(bm.id, "345")
+        self.assertEqual(bm.created_at, dt)
+        self.assertEqual(bm.updated_at, dt)
 
 
 class TestBaseModel_save(unittest.TestCase):
@@ -114,16 +123,15 @@ class TestBaseModel_to_dict(unittest.TestCase):
         self.assertEqual(str, type(bm_dict["updated_at"]))
 
     def test_to_dict_output(self):
-        tuuid = "123456"
+        dt = datetime.today()
         bm = BaseModel()
-        bm.id = tuuid
-        bm.created_at = datetime.min
-        bm.updated_at = datetime.min
+        bm.id = "123456"
+        bm.created_at = bm.updated_at = dt
         tdict = {
             'id': '123456',
             '__class__': 'BaseModel',
-            'created_at': datetime.min.isoformat(),
-            'updated_at': datetime.min.isoformat()
+            'created_at': dt.isoformat(),
+            'updated_at': dt.isoformat()
         }
         self.assertDictEqual(bm.to_dict(), tdict)
 
@@ -136,6 +144,13 @@ class TestBaseModel_to_dict(unittest.TestCase):
         with self.assertRaises(TypeError):
             bm.to_dict(1)
 
-
 if __name__ == "__main__":
+    try:
+        os.rename("file.json", "tmp")
+    except IOError:
+        pass
     unittest.main()
+    try:
+        os.rename("tmp", "file.json")
+    except IOError:
+        pass
