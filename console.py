@@ -2,7 +2,7 @@
 """Defines the HBnB console."""
 import cmd
 import re
-from shlex import shlex
+from shlex import split
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -14,9 +14,17 @@ from models.review import Review
 
 
 def parse(arg):
-    lexer = shlex(arg)
-    retl = [i.strip(",") for i in lexer]
-    return retl
+    regex = r"\{(.*?)\}"
+    match = re.search(regex, arg)
+    if match is None:
+        lexer = split(arg)
+        return [i.strip(",") for i in lexer]
+    else:
+        lexer = split(arg[:match.span()[0]])
+        retl = [i.strip(",") for i in lexer]
+        retl.append(match.group())
+        return retl
+
 
 class HBNBCommand(cmd.Cmd):
     """Defines the HolbertonBnB command interpreter.
@@ -68,7 +76,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Usage: create <class>
-        Create a new class instance and prints its id.
+        Create a new class instance and print its id.
         """
         argl = parse(arg)
         if len(argl) == 0:
@@ -142,7 +150,7 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Usage: update <class> <id> <attribute_name> <attribute_value>
         Update a class instance of a given id by adding or updating
-        a given attribute key/value pair."""
+        a given attribute key/value pair or dictionary."""
         argl = parse(arg)
         objdict = storage.all()
         if len(argl) == 0:
@@ -155,7 +163,7 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         elif len(argl) == 2:
             print("** attribute name missing **")
-        elif len(argl) == 3 and type(eval(arg[2])) != dict:
+        elif len(argl) == 3 and type(eval(argl[2])) != dict:
             print("** value missing **")
         elif len(argl) == 4:
             obj = objdict["{}.{}".format(argl[0], argl[1])]
@@ -164,14 +172,15 @@ class HBNBCommand(cmd.Cmd):
                 obj.__dict__[argl[2]] = valtype(argl[3])
             else:
                 obj.__dict__[argl[2]] = argl[3]
-        elif type(eval(arg[2])) == dict:
+        elif type(eval(argl[2])) == dict:
             obj = objdict["{}.{}".format(argl[0], argl[1])]
-            for k, v in eval(arg[2]).items():
+            for k, v in eval(argl[2]).items():
                 if k in obj.__dict__.keys():
                     valtype = type(obj.__dict__[k])
                     obj.__dict__[k] = valtype(v)
                 else:
                     obj.__dict__[k] = v
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()

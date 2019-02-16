@@ -14,20 +14,20 @@ class TestHBNBCommand(unittest.TestCase):
         self.assertTrue(HBNBCommand().onecmd("quit"))
 
     def test_help_quit(self):
-        correct = "Quit command to exit the program"
+        correct = "Quit command to exit the program."
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help quit"))
             self.assertEqual(correct, output.getvalue().strip())
 
     def test_help_create(self):
-        correct = "Usage: create <class>\n"
-        correct += "Create a new class, print its id, and save it to file.json"
+        correct = "Usage: create <class>\n        "
+        correct += "Create a new class instance and print its id."
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help create"))
             self.assertEqual(correct, output.getvalue().strip())
 
     def test_help_EOF(self):
-        correct = "EOF signal to exit the program"
+        correct = "EOF signal to exit the program."
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertFalse(HBNBCommand().onecmd("help EOF"))
             self.assertEqual(correct, output.getvalue().strip())
