@@ -131,10 +131,6 @@ class TestUser_to_dict(unittest.TestCase):
         self.assertIn("created_at", us.to_dict())
         self.assertIn("updated_at", us.to_dict())
         self.assertIn("__class__", us.to_dict())
-        self.assertIn("email", us.to_dict())
-        self.assertIn("password", us.to_dict())
-        self.assertIn("first_name", us.to_dict())
-        self.assertIn("last_name", us.to_dict())
 
     def test_to_dict_contains_added_attributes(self):
         us = User()
@@ -149,10 +145,6 @@ class TestUser_to_dict(unittest.TestCase):
         self.assertEqual(str, type(us_dict["id"]))
         self.assertEqual(str, type(us_dict["created_at"]))
         self.assertEqual(str, type(us_dict["updated_at"]))
-        self.assertEqual(str, type(us_dict["email"]))
-        self.assertEqual(str, type(us_dict["password"]))
-        self.assertEqual(str, type(us_dict["first_name"]))
-        self.assertEqual(str, type(us_dict["last_name"]))
 
     def test_to_dict_output(self):
         dt = datetime.today()
@@ -164,10 +156,6 @@ class TestUser_to_dict(unittest.TestCase):
             '__class__': 'User',
             'created_at': dt.isoformat(),
             'updated_at': dt.isoformat(),
-            'email': '',
-            'password': '',
-            'first_name': '',
-            'last_name': ''
         }
         self.assertDictEqual(us.to_dict(), tdict)
 

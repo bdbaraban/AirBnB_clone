@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Defines the HBnB console."""
 import cmd
-import models
+from models import storage
 from models.user import User
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
@@ -36,7 +36,7 @@ class HBNBCommand(cmd.Cmd):
             print(BaseModel().id)
             FileStorage().save()
         elif arg_tup[0] == classes[1]:
-            print(BaseModel().id)
+            print(User().id)
             FileStorage().save()
 
     def help_create(self):
@@ -110,7 +110,10 @@ class HBNBCommand(cmd.Cmd):
         else:
             objl = []
             for obj in storage.all().values():
-                objl.append(obj.__str__())
+                if len(arg_tup) > 0 and arg_tup[0] == obj.__class__.__name__:
+                    objl.append(obj.__str__())
+                elif len(arg_tup) == 0:
+                    objl.append(obj.__str__())
             print(objl)
 
     def help_all(self):

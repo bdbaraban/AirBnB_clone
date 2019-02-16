@@ -7,6 +7,11 @@ from models.base_model import BaseModel
 class User(BaseModel):
     """Represents the User of the HBnB project."""
 
+    email = ""
+    password = ""
+    first_name = ""
+    last_name = ""
+
     def __init__(self, *args, **kwargs):
         """Initialize a new User.
 
@@ -15,8 +20,3 @@ class User(BaseModel):
             **kwargs (dict): Key/value pairs of attributes.
         """
         super().__init__(**kwargs)
-        self.email = ""
-        self.password = ""
-        self.first_name = ""
-        self.last_name = ""
-        models.storage.new(self)
