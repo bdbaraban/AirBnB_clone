@@ -44,5 +44,20 @@ class FileStorage:
                     elif o["__class__"] == "User":
                         del o["__class__"]
                         self.new(User(**o))
+                    elif o["__class__"] == "State":
+                        del o["__class__"]
+                        self.new(State(**o))
+                    elif o["__class__"] == "City":
+                        del o["__class__"]
+                        self.new(City(**o))
+                    elif o["__class__"] == "Amenity":
+                        del o["__class__"]
+                        self.new(Amenity(**o))
+                    elif o["__class__"] == "Place":
+                        del o["__class__"]
+                        self.new(Place(**o))
+                    elif o["__class__"] == "Review":
+                        del o["__class__"]
+                        self.new(Review(**o))
         except FileNotFoundError:
             return

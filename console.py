@@ -27,7 +27,13 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Create a new BaseModel, print its id, and save it to file.json"""
         arg_tup = parse(arg)
-        classes = ["BaseModel", "User"]
+        classes = ["BaseModel",
+                   "User",
+                   "State",
+                   "City",
+                   "Amenity",
+                   "Place",
+                   "Review"]
         if len(arg_tup) == 0:
             print("** class name missing **")
         elif arg_tup[0] not in classes:
@@ -37,6 +43,21 @@ class HBNBCommand(cmd.Cmd):
             FileStorage().save()
         elif arg_tup[0] == classes[1]:
             print(User().id)
+            FileStorage().save()
+        elif arg_tup[0] == classes[2]:
+            print(State().id)
+            FileStorage().save()
+        elif arg_tup[0] == classes[3]:
+            print(City().id)
+            FileStorage().save()
+        elif arg_tup[0] == classes[4]:
+            print(Amenity().id)
+            FileStorage().save()
+        elif arg_tup[0] == classes[5]:
+            print(Place().id)
+            FileStorage().save()
+        elif arg_tup[0] == classes[6]:
+            print(Review().id)
             FileStorage().save()
 
     def help_create(self):
@@ -64,7 +85,13 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """Display string representation of an instance w/ class and id info"""
         arg_tup = parse(arg)
-        classes = ["BaseModel", "User"]
+        classes = ["BaseModel",
+                   "User",
+                   "State",
+                   "City",
+                   "Amenity",
+                   "Place",
+                   "Review"]
         objdict = FileStorage()._FileStorage__objects
         if len(arg_tup) == 0:
             print("** class name missing **")
@@ -84,7 +111,13 @@ class HBNBCommand(cmd.Cmd):
     def do_destroy(self, arg):
         """Deletes instance based on class name and id updating JSON file"""
         arg_tup = parse(arg)
-        classes = ["BaseModel", "User"]
+        classes = ["BaseModel",
+                   "User",
+                   "State",
+                   "City",
+                   "Amenity",
+                   "Place",
+                   "Review"]
         if len(arg_tup) == 0:
             print("** class name missing **")
         elif arg_tup[0] not in classes:
@@ -104,7 +137,13 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Display string representations of all instantiated objects"""
         arg_tup = parse(arg)
-        classes = ["BaseModel", "User"]
+        classes = ["BaseModel",
+                   "User",
+                   "State",
+                   "City",
+                   "Amenity",
+                   "Place",
+                   "Review"]
         if len(arg_tup) > 0 and arg_tup[0] not in classes:
             print("** class doesn't exist **")
         else:
@@ -123,7 +162,13 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates instance based on id by adding or updating attribute"""
         arg_tup = parse(arg)
-        classes = ["BaseModel", "User"]
+        classes = ["BaseModel",
+                   "User",
+                   "State",
+                   "City",
+                   "Amenity",
+                   "Place",
+                   "Review"]
         objdict = FileStorage()._FileStorage__objects
         if len(arg_tup) == 0:
             print("** class name is missing **")
