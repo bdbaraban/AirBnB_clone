@@ -1,5 +1,4 @@
 #!/amr/bin/python3
-# test_amer.py
 """Defines unittests for models/amenity.py.
 
 Unittest classes:
@@ -11,6 +10,7 @@ import os
 import models
 import unittest
 from datetime import datetime
+from time import sleep
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models.amenity import Amenity
@@ -46,11 +46,13 @@ class TestAmenity_instantiation(unittest.TestCase):
 
     def test_two_amenities_different_created_at(self):
         am1 = Amenity()
+        sleep(0.05)
         am2 = Amenity()
         self.assertLess(am1.created_at, am2.created_at)
 
     def test_two_amenities_different_updated_at(self):
         am1 = Amenity()
+        sleep(0.05)
         am2 = Amenity()
         self.assertLess(am1.updated_at, am2.updated_at)
 
@@ -98,16 +100,19 @@ class TestAmenity_save(unittest.TestCase):
 
     def test_one_save(self):
         am = Amenity()
+        sleep(0.05)
         first_updated_at = am.updated_at
         am.save()
         self.assertLess(first_updated_at, am.updated_at)
 
     def test_two_saves(self):
         am = Amenity()
+        sleep(0.05)
         first_updated_at = am.updated_at
         am.save()
         second_updated_at = am.updated_at
         self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
         am.save()
         self.assertLess(second_updated_at, am.updated_at)
 
