@@ -1,19 +1,20 @@
 #!/usr/bin/python3
-"""Defines the User class."""
+"""Defines the State class."""
 import models
 from models.base_model import BaseModel
 
 
-class User(BaseModel):
-    """Represents the User of the HBnB project."""
+class State(BaseModel):
+    """Represent a state.
 
-    email = ""
-    password = ""
-    first_name = ""
-    last_name = ""
+    Attributes:
+        name (str): The name of the state.
+    """
+
+    name = ""
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new User.
+        """Initialize a new State.
 
         Args:
             *args (any): Unused.

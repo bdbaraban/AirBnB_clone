@@ -11,6 +11,7 @@ import os
 import models
 import unittest
 from datetime import datetime
+from time import sleep
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models.user import User
@@ -41,11 +42,13 @@ class TestUser_instantiation(unittest.TestCase):
 
     def test_two_users_different_created_at(self):
         us1 = User()
+        sleep(0.05)
         us2 = User()
         self.assertLess(us1.created_at, us2.created_at)
 
     def test_two_users_different_updated_at(self):
         us1 = User()
+        sleep(0.05)
         us2 = User()
         self.assertLess(us1.updated_at, us2.updated_at)
 
@@ -93,16 +96,19 @@ class TestUser_save(unittest.TestCase):
 
     def test_one_save(self):
         us = User()
+        sleep(0.05)
         first_updated_at = us.updated_at
         us.save()
         self.assertLess(first_updated_at, us.updated_at)
 
     def test_two_saves(self):
         us = BaseModel()
+        sleep(0.05)
         first_updated_at = us.updated_at
         us.save()
         second_updated_at = us.updated_at
         self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
         us.save()
         self.assertLess(second_updated_at, us.updated_at)
 
@@ -131,10 +137,6 @@ class TestUser_to_dict(unittest.TestCase):
         self.assertIn("created_at", us.to_dict())
         self.assertIn("updated_at", us.to_dict())
         self.assertIn("__class__", us.to_dict())
-        self.assertIn("email", us.to_dict())
-        self.assertIn("password", us.to_dict())
-        self.assertIn("first_name", us.to_dict())
-        self.assertIn("last_name", us.to_dict())
 
     def test_to_dict_contains_added_attributes(self):
         us = User()
@@ -149,10 +151,6 @@ class TestUser_to_dict(unittest.TestCase):
         self.assertEqual(str, type(us_dict["id"]))
         self.assertEqual(str, type(us_dict["created_at"]))
         self.assertEqual(str, type(us_dict["updated_at"]))
-        self.assertEqual(str, type(us_dict["email"]))
-        self.assertEqual(str, type(us_dict["password"]))
-        self.assertEqual(str, type(us_dict["first_name"]))
-        self.assertEqual(str, type(us_dict["last_name"]))
 
     def test_to_dict_output(self):
         dt = datetime.today()
@@ -164,10 +162,6 @@ class TestUser_to_dict(unittest.TestCase):
             '__class__': 'User',
             'created_at': dt.isoformat(),
             'updated_at': dt.isoformat(),
-            'email': '',
-            'password': '',
-            'first_name': '',
-            'last_name': ''
         }
         self.assertDictEqual(us.to_dict(), tdict)
 

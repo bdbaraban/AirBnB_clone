@@ -10,6 +10,7 @@ import os
 import models
 import unittest
 from datetime import datetime
+from time import sleep
 from models.base_model import BaseModel
 
 
@@ -38,11 +39,13 @@ class TestBaseModel_instantiation(unittest.TestCase):
 
     def test_two_models_different_created_at(self):
         bm1 = BaseModel()
+        sleep(0.05)
         bm2 = BaseModel()
         self.assertLess(bm1.created_at, bm2.created_at)
 
     def test_two_models_different_updated_at(self):
         bm1 = BaseModel()
+        sleep(0.05)
         bm2 = BaseModel()
         self.assertLess(bm1.updated_at, bm2.updated_at)
 
@@ -94,16 +97,19 @@ class TestBaseModel_save(unittest.TestCase):
 
     def test_one_save(self):
         bm = BaseModel()
+        sleep(0.05)
         first_updated_at = bm.updated_at
         bm.save()
         self.assertLess(first_updated_at, bm.updated_at)
 
     def test_two_saves(self):
         bm = BaseModel()
+        sleep(0.05)
         first_updated_at = bm.updated_at
         bm.save()
         second_updated_at = bm.updated_at
         self.assertLess(first_updated_at, second_updated_at)
+        sleep(0.05)
         bm.save()
         self.assertLess(second_updated_at, bm.updated_at)
 

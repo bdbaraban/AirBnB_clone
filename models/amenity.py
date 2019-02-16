@@ -1,19 +1,20 @@
 #!/usr/bin/python3
-"""Defines the User class."""
+"""Defines the Amenity class."""
 import models
 from models.base_model import BaseModel
 
 
-class User(BaseModel):
-    """Represents the User of the HBnB project."""
+class Amenity(BaseModel):
+    """Represent an amenity.
 
-    email = ""
-    password = ""
-    first_name = ""
-    last_name = ""
+    Attributes:
+        name (str): The name of the amenity.
+    """
+
+    name = ""
 
     def __init__(self, *args, **kwargs):
-        """Initialize a new User.
+        """Initialize a new Amenity.
 
         Args:
             *args (any): Unused.
