@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines the HBnB console."""
 import cmd
+from shlex import split
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -12,7 +13,8 @@ from models.review import Review
 
 
 def parse(arg):
-    return tuple(arg.split())
+    argl = split(arg)
+    return [i.strip(",") for i in argl]
 
 
 class HBNBCommand(cmd.Cmd):
@@ -27,6 +29,19 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """Do nothing upon receiving an empty line."""
         pass
+
+    def default(self, arg):
+        """Default behavior for cmd module when input is invalid"""
+        argl = arg.split('.')
+        command = argl[1].split('(')
+        command[1] = command[1].strip(')')
+        argdict = {'all': self.do_all,
+                   'show': self.do_show, 'destroy': self.do_destroy,
+                   'update': self.do_update}
+        if command[0] in argdict.keys():
+            return argdict[command[0]]("{} {}".format(argl[0], command[1]))
+        print("*** Unknown syntax: {}".format(arg))
+        return False
 
     def do_create(self, arg):
         """Create a new BaseModel, print its id, and save it to file.json"""
