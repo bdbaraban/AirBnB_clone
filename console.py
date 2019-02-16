@@ -2,9 +2,13 @@
 """Defines the HBnB console."""
 import cmd
 from models import storage
-from models.user import User
 from models.base_model import BaseModel
-from models.engine.file_storage import FileStorage
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 def parse(arg):
@@ -27,38 +31,22 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Create a new BaseModel, print its id, and save it to file.json"""
         arg_tup = parse(arg)
-        classes = ["BaseModel",
-                   "User",
-                   "State",
-                   "City",
-                   "Amenity",
-                   "Place",
-                   "Review"]
+        classes = {
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Place",
+            "Amenity",
+            "Review"
+        }
         if len(arg_tup) == 0:
             print("** class name missing **")
         elif arg_tup[0] not in classes:
             print("** class doesn't exist **")
-        elif arg_tup[0] == classes[0]:
-            print(BaseModel().id)
-            FileStorage().save()
-        elif arg_tup[0] == classes[1]:
-            print(User().id)
-            FileStorage().save()
-        elif arg_tup[0] == classes[2]:
-            print(State().id)
-            FileStorage().save()
-        elif arg_tup[0] == classes[3]:
-            print(City().id)
-            FileStorage().save()
-        elif arg_tup[0] == classes[4]:
-            print(Amenity().id)
-            FileStorage().save()
-        elif arg_tup[0] == classes[5]:
-            print(Place().id)
-            FileStorage().save()
-        elif arg_tup[0] == classes[6]:
-            print(Review().id)
-            FileStorage().save()
+        else:
+            print(eval(arg_tup[0])().id)
+            storage.save()
 
     def help_create(self):
         """Dislay information about the create command."""
@@ -85,14 +73,16 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, arg):
         """Display string representation of an instance w/ class and id info"""
         arg_tup = parse(arg)
-        classes = ["BaseModel",
-                   "User",
-                   "State",
-                   "City",
-                   "Amenity",
-                   "Place",
-                   "Review"]
-        objdict = FileStorage()._FileStorage__objects
+        objdict = storage.all()
+        classes = {
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Place",
+            "Amenity",
+            "Review"
+        }
         if len(arg_tup) == 0:
             print("** class name missing **")
         elif arg_tup[0] not in classes:
@@ -109,15 +99,18 @@ class HBNBCommand(cmd.Cmd):
         print("Displays an object's string repr based on the object's id")
 
     def do_destroy(self, arg):
-        """Deletes instance based on class name and id updating JSON file"""
+        """Delete instance based on class name and id updating JSON file"""
         arg_tup = parse(arg)
-        classes = ["BaseModel",
-                   "User",
-                   "State",
-                   "City",
-                   "Amenity",
-                   "Place",
-                   "Review"]
+        objdict = storage.all()
+        classes = {
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Place",
+            "Amenity",
+            "Review"
+        }
         if len(arg_tup) == 0:
             print("** class name missing **")
         elif arg_tup[0] not in classes:
@@ -137,13 +130,15 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, arg):
         """Display string representations of all instantiated objects"""
         arg_tup = parse(arg)
-        classes = ["BaseModel",
-                   "User",
-                   "State",
-                   "City",
-                   "Amenity",
-                   "Place",
-                   "Review"]
+        classes = {
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Place",
+            "Amenity",
+            "Review"
+        }
         if len(arg_tup) > 0 and arg_tup[0] not in classes:
             print("** class doesn't exist **")
         else:
@@ -162,14 +157,16 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, arg):
         """Updates instance based on id by adding or updating attribute"""
         arg_tup = parse(arg)
-        classes = ["BaseModel",
-                   "User",
-                   "State",
-                   "City",
-                   "Amenity",
-                   "Place",
-                   "Review"]
-        objdict = FileStorage()._FileStorage__objects
+        objdict = storage.all()
+        classes = {
+            "BaseModel",
+            "User",
+            "State",
+            "City",
+            "Place",
+            "Amenity",
+            "Review"
+        }
         if len(arg_tup) == 0:
             print("** class name is missing **")
         elif arg_tup[0] not in classes:
