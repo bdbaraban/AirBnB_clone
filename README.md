@@ -16,10 +16,12 @@ The project currently only implements the back-end console.
 
 [TODO: List or table of supported classes]
 
-Classes | BaseModel | User | State | City | Amenity | Place | Review
-:-----: | :-------: | :---:| :---: | :---:| :-----: | :---: | :----:
-Public Instance Attributes | id<br>created_at<br>updated_at | | | | | | |
-Public Instance Methods | save<br>to_dict
+Classes | BaseModel | FileStorage | User | State | City | Amenity | Place | Review
+:-----: | :-------: | :---------: | :---:| :---: | :---:| :-----: | :---: | :----:
+Public Instance Attributes | id<br>created_at<br>updated_at | | | | | | | |
+Public Instance Methods | save<br>to_dict | all<br>new<br>save<br>reload | | | | | |
+Public Class Attributes | | | email<br>password<br>first_name<br>last_name | name | state_id<br>name | name | city_id<br>user_id<br>name<br>description<br>number_rooms<br>number_bathrooms<br>max_guest<br>price_by_night<br>latitude<br>longitude<br>amenity_ids | place_id<br>user_id<br>text
+Private Class Attributes | | file_path<br>objects | | | | | | |
 ## Console :computer:
 
 The console manages the backend of HolbertonBnB. It can be used to handle and 
