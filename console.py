@@ -51,8 +51,10 @@ class HBNBCommand(cmd.Cmd):
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""
         argl = arg.split('.')
-        command = argl[1].split('(')
-        command[1] = command[1].strip(')')
+        if len(argl) > 1:
+            command = argl[1].split('(')
+            if len(command) > 1:
+                command[1] = command[1].strip(')')
         argdict = {
             "all": self.do_all,
             "show": self.do_show,
@@ -60,8 +62,11 @@ class HBNBCommand(cmd.Cmd):
             "count": self.do_count,
             "update": self.do_update
         }
-        if command[0] in argdict.keys():
-            return argdict[command[0]]("{} {}".format(argl[0], command[1]))
+        try:
+            if argl[0] in argdict.keys():
+                return argdict[command[0]]("{} {}".format(argl[0], command[1]))
+        except IndexError:
+            print("*** Unknown syntax: {}".format(arg))
         print("*** Unknown syntax: {}".format(arg))
         return False
 
