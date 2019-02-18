@@ -11,7 +11,6 @@ import models
 import unittest
 from datetime import datetime
 from time import sleep
-from models.base_model import BaseModel
 from models.user import User
 
 
@@ -107,7 +106,7 @@ class TestUser_save(unittest.TestCase):
         self.assertLess(first_updated_at, us.updated_at)
 
     def test_two_saves(self):
-        us = BaseModel()
+        us = User()
         sleep(0.05)
         first_updated_at = us.updated_at
         us.save()
