@@ -14,8 +14,6 @@ The project currently only implements the back-end console.
 
 ## Classes :cl:
 
-[TODO: List or table of supported classes]
-
 Classes | BaseModel | FileStorage | User | State | City | Amenity | Place | Review
 :-----: | :-------: | :---------: | :---:| :---: | :---:| :-----: | :---: | :----:
 Public Instance Attributes | id<br>created_at<br>updated_at | | | | | | | |
