@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# test_user.py
 """Defines unittests for models/user.py.
 
 Unittest classes:
@@ -64,14 +63,21 @@ class TestUser_instantiation(unittest.TestCase):
         self.assertIn("'created_at': " + dt_repr, usstr)
         self.assertIn("'updated_at': " + dt_repr, usstr)
 
+    def test_args_unused(self):
+        us = User(None)
+        self.assertNotIn(None, us.__dict__.values())
+
     def test_instantiation_with_kwargs(self):
-        """instantiation with kwargs test method"""
         dt = datetime.today()
         dt_iso = dt.isoformat()
         us = User(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(us.id, "345")
         self.assertEqual(us.created_at, dt)
         self.assertEqual(us.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            User(id=None, created_at=None, updated_at=None)
 
 
 class TestUser_save(unittest.TestCase):
@@ -115,7 +121,7 @@ class TestUser_save(unittest.TestCase):
     def test_save_with_arg(self):
         us = User()
         with self.assertRaises(TypeError):
-            us.save(1)
+            us.save(None)
 
     def test_save_updates_file(self):
         us = User()
@@ -172,7 +178,7 @@ class TestUser_to_dict(unittest.TestCase):
     def test_to_dict_with_arg(self):
         us = User()
         with self.assertRaises(TypeError):
-            us.to_dict(1)
+            us.to_dict(None)
 
 
 if __name__ == "__main__":

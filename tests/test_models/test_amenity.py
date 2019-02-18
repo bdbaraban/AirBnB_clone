@@ -68,6 +68,10 @@ class TestAmenity_instantiation(unittest.TestCase):
         self.assertIn("'created_at': " + dt_repr, amstr)
         self.assertIn("'updated_at': " + dt_repr, amstr)
 
+    def test_args_unused(self):
+        am = Amenity(None)
+        self.assertNotIn(None, am.__dict__.values())
+
     def test_instantiation_with_kwargs(self):
         """instantiation with kwargs test method"""
         dt = datetime.today()
@@ -76,6 +80,10 @@ class TestAmenity_instantiation(unittest.TestCase):
         self.assertEqual(am.id, "345")
         self.assertEqual(am.created_at, dt)
         self.assertEqual(am.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            Amenity(id=None, created_at=None, updated_at=None)
 
 
 class TestAmenity_save(unittest.TestCase):
@@ -119,7 +127,7 @@ class TestAmenity_save(unittest.TestCase):
     def test_save_with_arg(self):
         am = Amenity()
         with self.assertRaises(TypeError):
-            am.save(1)
+            am.save(None)
 
     def test_save_updates_file(self):
         am = Amenity()
@@ -176,7 +184,7 @@ class TestAmenity_to_dict(unittest.TestCase):
     def test_to_dict_with_arg(self):
         am = Amenity()
         with self.assertRaises(TypeError):
-            am.to_dict(1)
+            am.to_dict(None)
 
 
 if __name__ == "__main__":

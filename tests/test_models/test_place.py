@@ -89,18 +89,18 @@ class TestPlace_instantiation(unittest.TestCase):
         self.assertIn("amenity_ids", dir(pl))
         self.assertNotIn("amenity_ids", pl.__dict__)
 
-    def test_two_cities_unique_ids(self):
+    def test_two_places_unique_ids(self):
         pl1 = Place()
         pl2 = Place()
         self.assertNotEqual(pl1.id, pl2.id)
 
-    def test_two_cities_different_created_at(self):
+    def test_two_places_different_created_at(self):
         pl1 = Place()
         sleep(0.05)
         pl2 = Place()
         self.assertLess(pl1.created_at, pl2.created_at)
 
-    def test_two_cities_different_updated_at(self):
+    def test_two_places_different_updated_at(self):
         pl1 = Place()
         sleep(0.05)
         pl2 = Place()
@@ -118,14 +118,21 @@ class TestPlace_instantiation(unittest.TestCase):
         self.assertIn("'created_at': " + dt_repr, plstr)
         self.assertIn("'updated_at': " + dt_repr, plstr)
 
+    def test_args_unused(self):
+        pl = Place(None)
+        self.assertNotIn(None, pl.__dict__.values())
+
     def test_instantiation_with_kwargs(self):
-        """instantiation with kwargs test method"""
         dt = datetime.today()
         dt_iso = dt.isoformat()
         pl = Place(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(pl.id, "345")
         self.assertEqual(pl.created_at, dt)
         self.assertEqual(pl.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            Place(id=None, created_at=None, updated_at=None)
 
 
 class TestPlace_save(unittest.TestCase):
@@ -169,7 +176,7 @@ class TestPlace_save(unittest.TestCase):
     def test_save_with_arg(self):
         pl = Place()
         with self.assertRaises(TypeError):
-            pl.save(1)
+            pl.save(None)
 
     def test_save_updates_file(self):
         pl = Place()
@@ -226,7 +233,7 @@ class TestPlace_to_dict(unittest.TestCase):
     def test_to_dict_with_arg(self):
         pl = Place()
         with self.assertRaises(TypeError):
-            pl.to_dict(1)
+            pl.to_dict(None)
 
 
 if __name__ == "__main__":
