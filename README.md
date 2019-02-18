@@ -16,6 +16,9 @@ The project currently only implements the back-end console.
 
 [TODO: List or table of supported classes]
 
+Classes | BaseModel | User | State | City | Amenity | Place | Review
+:-----: | :-------: | :---:| :---: | :---:| :-----: | :---: | :----:
+
 ## Console :computer:
 
 The console manages the backend of HolbertonBnB. It can be used to handle and 
