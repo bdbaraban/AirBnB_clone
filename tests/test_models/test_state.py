@@ -39,18 +39,18 @@ class TestState_instantiation(unittest.TestCase):
         self.assertIn("name", dir(st))
         self.assertNotIn("name", st.__dict__)
 
-    def test_two_cities_unique_ids(self):
+    def test_two_states_unique_ids(self):
         st1 = State()
         st2 = State()
         self.assertNotEqual(st1.id, st2.id)
 
-    def test_two_cities_different_created_at(self):
+    def test_two_states_different_created_at(self):
         st1 = State()
         sleep(0.05)
         st2 = State()
         self.assertLess(st1.created_at, st2.created_at)
 
-    def test_two_cities_different_updated_at(self):
+    def test_two_states_different_updated_at(self):
         st1 = State()
         sleep(0.05)
         st2 = State()
@@ -68,14 +68,21 @@ class TestState_instantiation(unittest.TestCase):
         self.assertIn("'created_at': " + dt_repr, ststr)
         self.assertIn("'updated_at': " + dt_repr, ststr)
 
+    def test_args_unused(self):
+        st = State(None)
+        self.assertNotIn(None, st.__dict__.values())
+
     def test_instantiation_with_kwargs(self):
-        """instantiation with kwargs test method"""
         dt = datetime.today()
         dt_iso = dt.isoformat()
         st = State(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(st.id, "345")
         self.assertEqual(st.created_at, dt)
         self.assertEqual(st.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            State(id=None, created_at=None, updated_at=None)
 
 
 class TestState_save(unittest.TestCase):
@@ -119,7 +126,7 @@ class TestState_save(unittest.TestCase):
     def test_save_with_arg(self):
         st = State()
         with self.assertRaises(TypeError):
-            st.save(1)
+            st.save(None)
 
     def test_save_updates_file(self):
         st = State()
@@ -176,7 +183,7 @@ class TestState_to_dict(unittest.TestCase):
     def test_to_dict_with_arg(self):
         st = State()
         with self.assertRaises(TypeError):
-            st.to_dict(1)
+            st.to_dict(None)
 
 
 if __name__ == "__main__":

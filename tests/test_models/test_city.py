@@ -73,14 +73,21 @@ class TestCity_instantiation(unittest.TestCase):
         self.assertIn("'created_at': " + dt_repr, cystr)
         self.assertIn("'updated_at': " + dt_repr, cystr)
 
+    def test_args_unused(self):
+        cy = City(None)
+        self.assertNotIn(None, cy.__dict__.values())
+
     def test_instantiation_with_kwargs(self):
-        """instantiation with kwargs test method"""
         dt = datetime.today()
         dt_iso = dt.isoformat()
         cy = City(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(cy.id, "345")
         self.assertEqual(cy.created_at, dt)
         self.assertEqual(cy.updated_at, dt)
+
+    def test_instantiation_with_None_kwargs(self):
+        with self.assertRaises(TypeError):
+            City(id=None, created_at=None, updated_at=None)
 
 
 class TestCity_save(unittest.TestCase):
@@ -124,7 +131,7 @@ class TestCity_save(unittest.TestCase):
     def test_save_with_arg(self):
         cy = City()
         with self.assertRaises(TypeError):
-            cy.save(1)
+            cy.save(None)
 
     def test_save_updates_file(self):
         cy = City()
@@ -181,7 +188,7 @@ class TestCity_to_dict(unittest.TestCase):
     def test_to_dict_with_arg(self):
         cy = City()
         with self.assertRaises(TypeError):
-            cy.to_dict(1)
+            cy.to_dict(None)
 
 
 if __name__ == "__main__":
