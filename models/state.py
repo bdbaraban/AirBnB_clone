@@ -12,12 +12,3 @@ class State(BaseModel):
     """
 
     name = ""
-
-    def __init__(self, *args, **kwargs):
-        """Initialize a new State.
-
-        Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
-        """
-        super().__init__(**kwargs)

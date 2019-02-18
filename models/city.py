@@ -14,12 +14,3 @@ class City(BaseModel):
 
     state_id = ""
     name = ""
-
-    def __init__(self, *args, **kwargs):
-        """Initialize a new City.
-
-        Args:
-            *args (any): Unused.
-            **kwargs (dict): Key/value pairs of attributes.
-        """
-        super().__init__(**kwargs)
