@@ -18,7 +18,8 @@ The project currently only implements the back-end console.
 
 Classes | BaseModel | User | State | City | Amenity | Place | Review
 :-----: | :-------: | :---:| :---: | :---:| :-----: | :---: | :----:
-
+Public Instance Attributes | id<br>created_at<br>updated_at | | | | | | |
+Public Instance Methods | save<br>to_dict
 ## Console :computer:
 
 The console manages the backend of HolbertonBnB. It can be used to handle and 
