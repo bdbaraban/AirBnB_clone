@@ -49,3 +49,5 @@ class TestHBNBCommand_exit(unittest.TestCase):
 
     def test_quit_exits(self):
         self.assertTrue(HBNBCommand().onecmd("quit"))
+
+class TestHBNBCommand_all(unittest.TestCase):
