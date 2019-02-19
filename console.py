@@ -189,6 +189,7 @@ class HBNBCommand(cmd.Cmd):
                     obj.__dict__[k] = valtype(v)
                 else:
                     obj.__dict__[k] = v
+        storage.save()
 
 
 if __name__ == "__main__":
