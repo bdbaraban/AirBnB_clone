@@ -1,5 +1,11 @@
 #!/usr/bin/python3
-"""Defines unittests for console.py."""
+"""Defines unittests for console.py.
+
+Unittest classes:
+    TestHBNBCommand_prompting
+    TestHBNBCommand_help
+    TestHBNBCommand_exit
+"""
 import sys
 import unittest
 from console import HBNBCommand
@@ -101,3 +107,7 @@ class TestHBNBCommand_exit(unittest.TestCase):
     def test_EOF_exits(self):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
+
+
+if __name__ == "__main__":
+    unittest.main()
