@@ -1,9 +1,11 @@
+<p align="center">
+  <img src="https://github.com/bdbaraban/AirBnB_clone/tree/master/assets/hbnb_logo.png" alt="HolbertonBnB logo">
+</p>
+
 <h1 align="center">HolbertonBnB</h1>
 <p align="center">An AirBnB clone.</p>
 
-<p align="center">
-  <img src="https://github.com/bdbaraban/AirBnB_clone/blob/master/hbnb_logo.png" alt="HolbertonBnB logo">
-</p>
+---
 
 ## Description :house:
 
@@ -14,27 +16,57 @@ The project currently only implements the back-end console.
 
 ## Classes :cl:
 
-Classes | BaseModel | FileStorage | User | State | City | Amenity | Place | Review
-:-----: | :-------: | :---------: | :---:| :---: | :---:| :-----: | :---: | :----:
-Public Instance Attributes | id<br>created_at<br>updated_at | | | | | | | |
-Public Instance Methods | save<br>to_dict | all<br>new<br>save<br>reload | | | | | |
-Public Class Attributes | | | email<br>password<br>first_name<br>last_name | name | state_id<br>name | name | city_id<br>user_id<br>name<br>description<br>number_rooms<br>number_bathrooms<br>max_guest<br>price_by_night<br>latitude<br>longitude<br>amenity_ids | place_id<br>user_id<br>text
-Private Class Attributes | | file_path<br>objects | | | | | | |
+HolbertonBnB utilizes the following classes:
+
+| | BaseModel | FileStorage | User | State | City | Amenity | Place | Review |
+| | --------- | ----------- | -----| ----- | -----| ------- | ----- | ------ |
+| **PUBLIC INSTANCE ATTRIBUTES** | `id`<br>`created_at`<br>`updated_at` | | Inherits from `BaseModel` | Inherits from `BaseModel` | Inherits from `BaseModel` | Inherits from `BaseModel` | Inherits from `BaseModel` | Inherits from `BaseModel` |
+| **PUBLIC INSTANCE METHODS** | `save`<br>`to_dict` | `all`<br>`new`<br>`save`<br>`reload` | "" | "" | "" | "" | "" | "" |
+| **PUBLIC CLASS ATTRIBUTES** | | | `email`<br>`password`<br>`first_name`<br>`last_name`| `name` | `state_id`<br>`name` | `name` | `city_id`<br>`user_id`<br>`name`<br>`description`<br>`number_rooms`<br>`number_bathrooms`<br>`max_guest`<br>`price_by_night`<br>`latitude`<br>`longitude`<br>`amenity_ids` | `place_id`<br>`user_id`<br>`text` |
+| **PRIVATE CLASS ATTRIBUTES** | | `file_path`<br>`objects` | | | | | | | |
+
+## Storage :baggage_claim:
+
+The above classes are handled by the abstracted storage engine defined in the 
+[FileStorage](./models/engine/file_storage.py) class.
+
+Every time the backend is initialized, HolbertonBnB instantiates an instance of 
+`FileStorage` called `storage`. The `storage` object is loaded/re-loaded from 
+any class instances stored in the JSON file `file.json`. As class instances are 
+created, updated, or deleted, the `storage` object is used to register 
+corresponding changes in the `file.json`.
+
 ## Console :computer:
 
-The console manages the backend of HolbertonBnB. It can be used to handle and 
-manipulate all classes utilized by the application through the abstracted storage 
-engine (defined by the [FileStorage](./models/engine/file_storage.py) class).
+The console is a command line interpreter that permits management of the backend 
+of HolbertonBnB. It can be used to handle and manipulate all classes utilized by 
+the application (achieved by calls on the `storage` object defined above).
 
 ### Using the Console
 
-To use the HolbertonBnB console, run the file `console.py`:
+The HolbertonBnB console can be run both interactively and non-interactively. 
+To run the console in non-interactive mode, pipe any command(s) into an execution 
+of the file `console.py` at the command line.
+
+```
+$ echo "help" | ./console.py
+(hbnb) 
+Documented commands (type help <topic>):
+========================================
+EOF  all  count  create  destroy  help  quit  show  update
+
+(hbnb) 
+$
+```
+
+Alternatively, to use the HolbertonBnB console in interactive mode, run the 
+file `console.py` by itself:
 
 ```
 $ ./console.py
 ```
 
-While running, the console displays a prompt for input:
+While running in interactive mode, the console displays a prompt for input:
 
 ```
 $ ./console.py
@@ -47,6 +79,12 @@ To quit the console, enter the command `quit`, or input an EOF signal
 ```
 $ ./console.py
 (hbnb) quit
+$
+```
+
+```
+$ ./console.py
+(hbnb) EOF
 $
 ```
 
@@ -223,6 +261,21 @@ m', 'first_name': 'Holberton', 'updated_at': datetime.datetime(2019, 2, 17, 21,
 (hbnb) 
 ```
 
-## Authors
-* __Brennan D Baraban__ <[bdbaraban](https://github.com/bdbaraban)>
-* __Samie Azad__ <[sazad44](https://github.com/sazad44)>
+## Testing :straight_ruler:
+
+Unittests for the HolbertonBnB project are defined in the [tests](./tests) 
+folder. To run the entire test suite simultaneously, execute the following command:
+
+```
+$ python3 unittest -m discover tests
+```
+
+Alternatively, you can specify a single test file to run at a time:
+
+```
+$ python3 unittest -m tests/test_console.py
+```
+
+## Authors :black_nib:
+* **Brennan D Baraban** <[bdbaraban](https://github.com/bdbaraban)>
+* **Samie Azad** <[sazad44](https://github.com/sazad44)>
