@@ -14,8 +14,7 @@ from models.review import Review
 
 
 def parse(arg):
-    regex = r"\{(.*?)\}"
-    match = re.search(regex, arg)
+    match = re.search(r"\{(.*?)\}", arg)
     if match is None:
         lexer = split(arg)
         return [i.strip(",") for i in lexer]
@@ -50,11 +49,6 @@ class HBNBCommand(cmd.Cmd):
 
     def default(self, arg):
         """Default behavior for cmd module when input is invalid"""
-        argl = arg.split('.')
-        if len(argl) > 1:
-            command = argl[1].split('(')
-            if len(command) > 1:
-                command[1] = command[1].strip(')')
         argdict = {
             "all": self.do_all,
             "show": self.do_show,
@@ -62,11 +56,15 @@ class HBNBCommand(cmd.Cmd):
             "count": self.do_count,
             "update": self.do_update
         }
-        try:
-            if argl[0] in argdict.keys():
-                return argdict[command[0]]("{} {}".format(argl[0], command[1]))
-        except IndexError:
-            print("*** Unknown syntax: {}".format(arg))
+        match = re.search(r"\.", arg)
+        if match is not None:
+            argl = [arg[:match.span()[0]], arg[match.span()[1]:]]
+            match = re.search(r"\((.*?)\)", argl[1])
+            if match is not None:
+                command = [argl[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in argdict.keys():
+                    call = "{} {}".format(argl[0], command[1])
+                    return argdict[command[0]](call)
         print("*** Unknown syntax: {}".format(arg))
         return False
 
@@ -158,6 +156,7 @@ class HBNBCommand(cmd.Cmd):
         a given attribute key/value pair or dictionary."""
         argl = parse(arg)
         objdict = storage.all()
+
         if len(argl) == 0:
             print("** class name is missing **")
         elif argl[0] not in HBNBCommand.__classes:
@@ -168,20 +167,25 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
         elif len(argl) == 2:
             print("** attribute name missing **")
-        elif len(argl) == 3 and type(eval(argl[2])) != dict:
-            print("** value missing **")
-        elif len(argl) == 4:
+        elif len(argl) == 3:
+            try:
+                type(eval(argl[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return
+
+        if len(argl) == 4:
             obj = objdict["{}.{}".format(argl[0], argl[1])]
-            if argl[2] in obj.__dict__.keys():
-                valtype = type(obj.__dict__[argl[2]])
+            if argl[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[argl[2]])
                 obj.__dict__[argl[2]] = valtype(argl[3])
             else:
                 obj.__dict__[argl[2]] = argl[3]
         elif type(eval(argl[2])) == dict:
             obj = objdict["{}.{}".format(argl[0], argl[1])]
             for k, v in eval(argl[2]).items():
-                if k in obj.__dict__.keys():
-                    valtype = type(obj.__dict__[k])
+                if k in obj.__class__.__dict__.keys():
+                    valtype = type(obj.__class__.__dict__[k])
                     obj.__dict__[k] = valtype(v)
                 else:
                     obj.__dict__[k] = v
