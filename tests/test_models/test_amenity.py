@@ -34,6 +34,7 @@ class TestAmenity_instantiation(unittest.TestCase):
 
     def test_name_is_public_class_attribute(self):
         am = Amenity()
+        self.assertEqual(str, type(Amenity.name))
         self.assertIn("name", dir(Amenity()))
         self.assertNotIn("name", am.__dict__)
 
