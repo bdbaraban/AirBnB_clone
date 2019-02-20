@@ -69,7 +69,8 @@ class TestFileStorage_methods(unittest.TestCase):
     def test_all(self):
         objs = models.storage.all()
         self.assertEqual(type(objs), dict)
-        self.assertEqual(str, type(list(objs.keys())[0]))
+        if len(objs.keys()) > 0:
+            self.assertEqual(str, type(list(objs.keys())[0]))
         self.assertIsInstance(list(objs.values())[0], BaseModel)
 
     def test_all_with_arg(self):
