@@ -69,9 +69,11 @@ class TestFileStorage_methods(unittest.TestCase):
     def test_all(self):
         objs = models.storage.all()
         self.assertEqual(type(objs), dict)
-        if len(objs.keys()) > 0:
-            self.assertEqual(str, type(list(objs.keys())[0]))
         self.assertIsInstance(list(objs.values())[0], BaseModel)
+        try:
+            self.assertEqual(str, type(list(objs.keys())[0]))
+        except IndexError:
+            pass
 
     def test_all_with_arg(self):
         with self.assertRaises(TypeError):
