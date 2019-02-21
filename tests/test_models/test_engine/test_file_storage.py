@@ -60,7 +60,7 @@ class TestFileStorage_methods(unittest.TestCase):
             os.rename("tmp", "file.json")
         except IOError:
             pass
-        models.storage._FileStorage__objects = {}
+        FileStorage._FileStorage__objects = {}
 
     def test_all(self):
         self.assertEqual(dict, type(models.storage.all()))
@@ -146,24 +146,23 @@ class TestFileStorage_methods(unittest.TestCase):
         cy = City()
         am = Amenity()
         rv = Review()
-        with open("file.json", "w") as f:
-            json.dump({
-                "BaseModel." + bm.id: bm.to_dict(),
-                "User." + us.id: us.to_dict(),
-                "State." + st.id: st.to_dict(),
-                "Place." + pl.id: pl.to_dict(),
-                "City." + cy.id: cy.to_dict(),
-                "Amenity." + am.id: am.to_dict(),
-                "Review." + rv.id: rv.to_dict()
-            }, f)
+        models.storage.new(bm)
+        models.storage.new(us)
+        models.storage.new(st)
+        models.storage.new(pl)
+        models.storage.new(cy)
+        models.storage.new(am)
+        models.storage.new(rv)
+        models.storage.save()
         models.storage.reload()
-        self.assertIn("BaseModel." + bm.id, models.storage.all().keys())
-        self.assertIn("User." + us.id, models.storage.all().keys())
-        self.assertIn("State." + st.id, models.storage.all().keys())
-        self.assertIn("Place." + pl.id, models.storage.all().keys())
-        self.assertIn("City." + cy.id, models.storage.all().keys())
-        self.assertIn("Amenity." + am.id, models.storage.all().keys())
-        self.assertIn("Review." + rv.id, models.storage.all().keys())
+        objs = models.storage.all()
+        self.assertIn("BaseModel." + bm.id, objs)
+        self.assertIn("User." + us.id, objs)
+        self.assertIn("State." + st.id, objs)
+        self.assertIn("Place." + pl.id, objs)
+        self.assertIn("City." + cy.id, objs)
+        self.assertIn("Amenity." + am.id, objs)
+        self.assertIn("Review." + rv.id, objs)
 
     def test_reload_no_file(self):
         self.assertRaises(FileNotFoundError, models.storage.reload())
