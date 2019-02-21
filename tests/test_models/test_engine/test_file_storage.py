@@ -165,10 +165,6 @@ class TestFileStorage_methods(unittest.TestCase):
         self.assertIn("Review." + rv.id, objs)
 
     def test_reload_no_file(self):
-        try:
-            os.rename("file.json", "tmp")
-        except IOError:
-            pass
         self.assertRaises(FileNotFoundError, models.storage.reload())
 
     def test_reload_with_arg(self):
