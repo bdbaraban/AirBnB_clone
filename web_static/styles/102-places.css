@@ -105,6 +105,13 @@
   width: 100%;
 }
 
+/* Align header 1 as screen gets smaller */
+@media only screen and (max-width: 1000px) {
+  .places h1 {
+    width: 95%;
+  }
+}
+
 /* Header 2 style */
 .places h2 {
   font-size: 30px;
